@@ -1,0 +1,126 @@
+﻿
+
+@using OnlineMusicApp.Controllers;
+@*@using OnlineMusicApp.Models;*@
+@{
+    ViewData["Title"] = "Play Music";
+}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<script>
+
+
+        function addTrackToFavorites(trackId, name, artist, album, imageUrl, previewUrl) {
+            $.ajax({
+                url: '@Url.Action("Create", "UserAlbums")',
+                type: 'POST',
+                data: {
+                    'MusicAppUser': '',
+                    'TrackId': trackId,
+                    'Name': name,
+                    'Artist': artist,
+                    'Album': album,
+                    'ImageUrl': imageUrl,
+                    'PreviewUrl': previewUrl
+                },
+                success: function (result) {
+                    alert('Track added to favorites!');
+                },
+                error: function (error) {
+                    alert('Failed to add track to favorites.' + error);
+                }
+            });
+        }
+
+
+</script>
+</head>
+
+
+<div>
+<form method="post">
+        <input type="text" value="" name="query" placeholder="Search" />
+        <input type="submit" value="Search" />
+</form>
+</div>
+<div class="d-flex flex-wrap justify-content-center">
+
+    @if (ViewData["MusicTracks"] != null)
+    {
+        List<Track> musicTracks = ViewData["MusicTracks"] as List<Track>;
+        foreach (var track in musicTracks)
+        {
+            // Do something with each track, e.g. display its name or artist
+            <div class="card">
+                <img class="card-img" src="@track.ImageUrl" alt="@track.Album Artwork">
+                <div class="card-body">
+                    <h5 class="card-title">@track.Name</h5>
+                    <p class="card-text">@track.Artist - @track.Album</p>
+                    <audio controls class="card-audio">
+                        <source src="@track.PreviewUrl" type="audio/mpeg">
+                    </audio>
+                  
+                    
+                    <form asp-action="AddFav" method="post">
+                        <input type="text" value="@track.Id" name="track_id" hidden />
+                        <input type="text" value="@track.Name" name="track_name" hidden />
+                        <input type="text" value="@track.Artist" name="track_artist" hidden />
+                        <input type="text" value="@track.Album" name="track_album" hidden />
+                        <input type="text" value="@track.ImageUrl" name="track_image_url" hidden />
+                        <input type="text" value="@track.PreviewUrl" name="track_preview_url" hidden />
+
+                        <button type="submit" name="fav" id="like-button" class="btn">
+                            <i class="far fa-heart"></i> Add to Favorites
+                        </button>
+                    </form>
+
+
+                </div>
+            </div>
+
+        }
+    }
+    else
+    {
+        <p>No Music Found!</p>
+    }
+
+</div>
+
+<style>
+    .card {
+        width: calc(33.33% - 20px);
+        margin: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .card-img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    .card-audio {
+        width: 100%;
+    }
+
+
+</style>

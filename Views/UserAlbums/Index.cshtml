@@ -1,0 +1,65 @@
+﻿@model IEnumerable<OnlineMusicApp.Models.UserAlbum>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class="d-flex flex-wrap justify-content-center">
+
+@foreach (var item in Model) {
+    <div class="card m-3">
+        <img class="card-img" src="@item.ImageUrl" alt="@item.Album Artwork">
+        <div class="card-body">
+            <h5 class="card-title">@item.Name</h5>
+            <p class="card-text">@item.Artist - @item.Album</p>
+            <audio controls class="card-audio">
+                <source src="@item.PreviewUrl" type="audio/mpeg">
+            </audio>
+
+            @*have a button to remove from fav*@
+
+
+        </div>
+    </div>
+}
+</div>
+    
+
+<style>
+    .card {
+        width: calc(33.33% - 20px);
+        margin: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    .card-audio {
+        width: 100%;
+    }
+
+</style>
